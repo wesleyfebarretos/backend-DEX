@@ -15,7 +15,8 @@
     "pg": "^8.8.0",
     "reflect-metadata": "^0.1.13",
     "shim": "^0.6.0",
-    "typeorm": "^0.3.10"
+    "typeorm": "^0.3.10",
+    "types": "^0.1.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",

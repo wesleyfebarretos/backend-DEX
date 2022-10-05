@@ -1230,6 +1230,11 @@ typeorm@^0.3.10:
     xml2js "^0.4.23"
     yargs "^17.3.1"
 
+types@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/types/-/types-0.1.0.tgz#21e7cc70bef558e78cda238c84cd3e440b33a886"
+  integrity sha512-kG0V/rmWU0yQ9Ej05MVimqwOxQZDsLUBesqkp1352MGt2UW9BXE4mSdIsk2dCZhRMdtlCZNnsYmWWMep1vXa/A==
+
 typescript@*:
   version "4.8.4"
   resolved "https://registry.npmjs.org/typescript/-/typescript-4.8.4.tgz"

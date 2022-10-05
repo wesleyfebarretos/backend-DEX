@@ -1,14 +1,20 @@
 import { Request, Response } from "express";
-import axios from "axios";
+import { AppDataSource } from "../data-source";
+import { PokemonEntity } from "../entities/pokemon";
 
 export class PokemonController {
   async get(req: Request, res: Response) {
-    try {
-      const result = await axios.get(
-        `https://pokeapi.co/api/v2/pokemon/${req.params.pokemon}`
-      );
+    let query: any = { name: req.params.pokemon };
 
-      res.send(result.data);
+    if (!isNaN(+req.params.pokemon)) {
+      query = { id: Number(req.params.pokemon) };
+    }
+    try {
+      const result = await AppDataSource.getRepository(PokemonEntity).find({
+        where: query,
+        relations: { abilities: true, types: true, sprites: true },
+      });
+      res.send(result);
     } catch (error) {
       res
         .status(404)
