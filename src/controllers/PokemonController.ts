@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { AppDataSource } from "../data-source";
 import { PokemonEntity } from "../entities/pokemon";
+import { NotFoundError } from "../helpers/api-errors";
 
 export class PokemonController {
   async get(req: Request, res: Response) {
@@ -9,16 +10,15 @@ export class PokemonController {
     if (!isNaN(+req.params.pokemon)) {
       query = { id: Number(req.params.pokemon) };
     }
-    try {
-      const result = await AppDataSource.getRepository(PokemonEntity).find({
-        where: query,
-        relations: { abilities: true, types: true, sprites: true },
-      });
-      res.send(result);
-    } catch (error) {
-      res
-        .status(404)
-        .json({ message: `Pokemon ${req.params.pokemon} does not exist` });
+
+    const result = await AppDataSource.getRepository(PokemonEntity).find({
+      where: query,
+      relations: { abilities: true, types: true, sprites: true },
+    });
+    console.log(result);
+    if (!result.length) {
+      throw new NotFoundError("Pokemon does not exist");
     }
+    res.send(result);
   }
 }
