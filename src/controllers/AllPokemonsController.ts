@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { off } from "process";
 import { AppDataSource } from "../data-source";
 import { PokemonEntity } from "../entities/pokemon";
 
@@ -14,19 +15,13 @@ export class AllPokemonsController {
       skip: offset,
       take: limit,
     });
-    const next = offset
-      ? `http://localhost:3000/pokemons?offset=${
-          offset + result.length
-        }&limit=${limit}`
+    const next = limit
+      ? `http://localhost:3000/pokemons?offset=${offset + limit}&limit=${limit}`
       : null;
 
-    res.send(
-      JSON.parse(
-        JSON.stringify({
-          next: next,
-          results: result,
-        })
-      )
-    );
+    res.json({
+      next: next,
+      results: result,
+    });
   }
 }
