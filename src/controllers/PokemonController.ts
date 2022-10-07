@@ -15,7 +15,6 @@ export class PokemonController {
       where: query,
       relations: { abilities: true, types: true, sprites: true },
     });
-    console.log(result);
     if (!result.length) {
       throw new NotFoundError("Pokemon does not exist");
     }
