@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { AllPokemonsController } from "./controllers/AllPokemonsController";
-import { PokemonController } from "./controllers/PokemonController";
+import { PokemonController } from "./controllers/pokemon-controller";
 
 const routes = Router();
+const pokemonController = new PokemonController();
 
-routes.get("/pokemons", new AllPokemonsController().get);
-routes.get("/pokemon/:pokemon", new PokemonController().get);
+routes.get("/pokemons", pokemonController.getAll);
+routes.get("/pokemon/:pokemon", pokemonController.getOne);
 
 export default routes;

@@ -1,11 +1,12 @@
 import "express-async-errors";
-import express from "express";
+import express, { Express } from "express";
 import cors from "cors";
 import routes from "./routes";
 import { AppDataSource } from "./data-source";
-import { errorMiddleware } from "./middlewares/error";
+import { errorMiddleware } from "./middlewares/error-middlewares";
 
-AppDataSource.initialize().then(() => {
+export async function setup(): Promise<Express> {
+  await AppDataSource.initialize();
   const app = express();
 
   app.use(cors());
@@ -13,7 +14,10 @@ AppDataSource.initialize().then(() => {
   app.use(routes);
   app.use(errorMiddleware);
 
+  return app;
+}
+setup().then((app) =>
   app.listen("3000", () => {
     console.log("running on port 3000");
-  });
-});
+  })
+);

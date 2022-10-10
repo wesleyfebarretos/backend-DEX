@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
-import { PokemonEntity } from "./pokemon";
+import { PokemonEntity } from "./pokemon-entity";
 
 @Entity({ name: "sprite" })
 export class SpriteEntity {

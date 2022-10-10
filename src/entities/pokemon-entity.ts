@@ -6,9 +6,9 @@ import {
   JoinTable,
   OneToMany,
 } from "typeorm";
-import { AbilityEntity } from "./ability";
-import { SpriteEntity } from "./sprite";
-import { TypeEntity } from "./type";
+import { AbilityEntity } from "./ability-entity";
+import { SpriteEntity } from "./sprite-entity";
+import { TypeEntity } from "./type-entity";
 
 @Entity({ name: "pokemon" })
 export class PokemonEntity {
