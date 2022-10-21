@@ -2,8 +2,8 @@ import "express-async-errors";
 import express, { Express } from "express";
 import cors from "cors";
 import routes from "./routes";
-import { AppDataSource } from "./data-source";
 import { errorMiddleware } from "./middlewares/error-middlewares";
+import { AppDataSource } from "./data-source";
 
 export async function setup(): Promise<Express> {
   await AppDataSource.initialize();
@@ -16,8 +16,3 @@ export async function setup(): Promise<Express> {
 
   return app;
 }
-setup().then((app) =>
-  app.listen("3000", () => {
-    console.log("running on port 3000");
-  })
-);

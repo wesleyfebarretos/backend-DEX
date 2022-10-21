@@ -20,18 +20,20 @@ export class PokemonEntity {
 
   @ManyToMany(() => AbilityEntity, (ability) => ability.pokemons, {
     cascade: true,
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
   })
   @JoinTable({ name: "pokemon_ability" })
   abilities: AbilityEntity[];
 
-  @OneToMany(() => SpriteEntity, (sprite) => sprite.pokemon, {
-    cascade: true,
-  })
+  @OneToMany(() => SpriteEntity, (sprite) => sprite.pokemon, { cascade: true })
   @JoinTable({ name: "pokemon_sprite" })
   sprites: SpriteEntity[];
 
   @ManyToMany(() => TypeEntity, (type) => type.pokemons, {
     cascade: true,
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
   })
   @JoinTable({ name: "pokemon_type" })
   types: TypeEntity[];

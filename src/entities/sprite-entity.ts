@@ -12,6 +12,9 @@ export class SpriteEntity {
   @Column({ name: "name" })
   name: string;
 
-  @ManyToOne(() => PokemonEntity, (pokemon) => pokemon.sprites)
+  @ManyToOne(() => PokemonEntity, (pokemon) => pokemon.sprites, {
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+  })
   pokemon: PokemonEntity;
 }
