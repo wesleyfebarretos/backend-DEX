@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { StatusCodes } from "http-status-codes";
 import { PokemonService } from "../services/pokemon-service";
 
 export class PokemonController {
@@ -12,99 +13,70 @@ export class PokemonController {
   }
 
   async getOne(req: Request, res: Response) {
-    const { pokemon }: any = req.params;
+    const { pokemon } = req.params;
 
     const result = await new PokemonService().getOne(pokemon);
 
     res.json(result);
   }
 
-  async getTypes(req: Request, res: Response) {
-    const result = await new PokemonService().getTypes();
+  async create(req: Request, res: Response) {
+    const { name, abilities, types, sprites } = req.body;
 
-    res.json(result);
-  }
-
-  async getOneType(req: Request, res: Response) {
-    const { type } = req.params;
-
-    const result = await new PokemonService().getOneType(type);
-
-    res.json(result);
-  }
-
-  async getAbilities(req: Request, res: Response) {
-    const result = await new PokemonService().getAbilities();
-    res.json(result);
-  }
-
-  async getOneAbility(req: Request, res: Response) {
-    const { ability } = req.params;
-
-    const result = await new PokemonService().getOneAbility(ability);
-    res.json(result);
-  }
-
-  async createNewPokemon(req: Request, res: Response) {
-    const { name } = req.body;
-    const { abilities } = req.body;
-    const { types } = req.body;
-    const { sprites } = req.body;
-
-    const result = await new PokemonService().createNewPokemon(
+    const result = await new PokemonService().create(
       name,
       abilities,
       types,
       sprites
     );
 
-    res.status(201).json({
+    res.status(StatusCodes.CREATED).json({
       id: result,
       message: `New pokemon ${name} created successfully`,
     });
   }
 
-  async deletePokemon(req: Request, res: Response) {
-    const { id } = req.params;
-
-    await new PokemonService().deletePokemon(id);
-
-    res.status(204).json();
-  }
-
-  async updatePokemonName(req: Request, res: Response) {
+  async updateName(req: Request, res: Response) {
     const { name } = req.body;
-    const { pokemon }: any = req.params;
+    const { pokemon } = req.params;
 
-    await new PokemonService().updatePokemonName(name, pokemon);
+    await new PokemonService().updateName(name, pokemon);
 
     res.json({ message: `Pokemon ${pokemon} successfully updated` });
   }
 
-  async updatePokemonAbilities(req: Request, res: Response) {
+  async updateAbilities(req: Request, res: Response) {
     const { abilities } = req.body;
-    const { pokemon }: any = req.params;
+    const { pokemon } = req.params;
 
-    await new PokemonService().updatePokemonAbilities(abilities, pokemon);
+    await new PokemonService().updateAbilities(abilities, pokemon);
 
     res.json({ message: `Pokemon ${pokemon} successfully updated` });
   }
 
-  async updatePokemonType(req: Request, res: Response) {
+  async updateTypes(req: Request, res: Response) {
     const { types } = req.body;
-    const { pokemon }: any = req.params;
+    const { pokemon } = req.params;
 
-    await new PokemonService().updatePokemonTypes(types, pokemon);
+    await new PokemonService().updateTypes(types, pokemon);
 
     res.json({ message: `Pokemon ${pokemon} successfully updated` });
   }
 
-  async updatePokemonSprite(req: Request, res: Response) {
+  async updateSprites(req: Request, res: Response) {
     const { sprites } = req.body;
-    const { pokemon }: any = req.params;
+    const { pokemon } = req.params;
 
-    await new PokemonService().updatePokemonSprites(sprites, pokemon);
+    await new PokemonService().updateSprites(sprites, pokemon);
 
     res.json({ message: `Pokemon ${pokemon} successfully updated` });
+  }
+
+  async delete(req: Request, res: Response) {
+    const { pokemon } = req.params;
+
+    await new PokemonService().delete(pokemon);
+
+    res.status(StatusCodes.NO_CONTENT).send();
   }
 }

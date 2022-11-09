@@ -1,11 +1,9 @@
 import { IsNull } from "typeorm";
 import { AppDataSource } from "../data-source";
-import { AbilityEntity } from "../entities/ability-entity";
 import { PokemonEntity } from "../entities/pokemon-entity";
 import { SpriteEntity } from "../entities/sprite-entity";
-import { TypeEntity } from "../entities/type-entity";
 import { BadRequestError, NotFoundError } from "../helpers/api-errors";
-import { abilitiesRepository } from "../repositories/abilities-repository";
+import { abilityRepository } from "../repositories/abilities-repository";
 import { pokemonRepository } from "../repositories/pokemon-repository";
 import { spriteRepository } from "../repositories/sprite-reposository";
 import { typeRepository } from "../repositories/types-repository";
@@ -13,6 +11,11 @@ import { typeRepository } from "../repositories/types-repository";
 export interface PaginateObject<T> {
   next: string;
   results: Array<T>;
+}
+
+interface QueryParameter {
+  id?: number;
+  name?: string;
 }
 export class PokemonService {
   async getAll(
@@ -29,7 +32,7 @@ export class PokemonService {
     });
 
     return {
-      next: `http://localhost:3000/pokemons?offset=${
+      next: `http://localhost:3000/pokemon?offset=${
         offset + limit
       }&limit=${limit}`,
       results: result,
@@ -37,90 +40,26 @@ export class PokemonService {
   }
 
   async getOne(pokemon: string): Promise<PokemonEntity> {
-    let query: any = { name: pokemon };
+    const query = this.buildFindPokemonQuery(pokemon);
 
-    if (!isNaN(+pokemon)) {
-      query = { id: Number(pokemon) };
-    }
-
-    const result = await AppDataSource.getRepository(PokemonEntity).findOne({
+    const result = await pokemonRepository.findOne({
       where: query,
       relations: { abilities: true, types: true, sprites: true },
     });
     if (!result) {
-      throw new NotFoundError("Pokemon does not exist");
+      throw new NotFoundError("Pokemon not found");
     }
 
     return result;
   }
 
-  async getTypes(): Promise<TypeEntity[]> {
-    const result = await AppDataSource.getRepository(TypeEntity).find({
-      order: {
-        id: "ASC",
-      },
-    });
-    return result;
-  }
-
-  async getOneType(type: string): Promise<TypeEntity> {
-    let param: any = { name: type };
-
-    if (!isNaN(+type)) {
-      param = { id: Number(type) };
-    }
-
-    const result = await AppDataSource.getRepository(TypeEntity).findOne({
-      where: param,
-      relations: { pokemons: true },
-      order: {
-        pokemons: { id: "ASC" },
-      },
-    });
-    if (!result) {
-      throw new NotFoundError("Type does not exist");
-    }
-
-    return result;
-  }
-
-  async getAbilities(): Promise<AbilityEntity[]> {
-    const result = await AppDataSource.getRepository(AbilityEntity).find({
-      order: {
-        id: "ASC",
-      },
-    });
-    return result;
-  }
-
-  async getOneAbility(ability: string): Promise<AbilityEntity> {
-    let param: any = { name: ability };
-
-    if (!isNaN(+ability)) {
-      param = { id: Number(ability) };
-    }
-
-    const result = await AppDataSource.getRepository(AbilityEntity).findOne({
-      where: param,
-      relations: { pokemons: true },
-      order: {
-        pokemons: { id: "ASC" },
-      },
-    });
-    if (!result) {
-      throw new NotFoundError("Ability does not exist");
-    }
-
-    return result;
-  }
-
-  async createNewPokemon(
+  async create(
     name: string,
     abilities: number[],
     types: number[],
     sprites: SpriteEntity[]
   ): Promise<Number> {
-    const pokemon = await AppDataSource.getRepository(PokemonEntity).findOne({
+    const pokemon = await pokemonRepository.findOne({
       where: { name: name },
       relations: { abilities: true, types: true, sprites: true },
     });
@@ -158,7 +97,7 @@ export class PokemonService {
         );
       }
 
-      const imgExist = await AppDataSource.getRepository(SpriteEntity).findOne({
+      const imgExist = await spriteRepository.findOne({
         where: {
           img: sprite.img,
         },
@@ -172,7 +111,7 @@ export class PokemonService {
     const allAbilities: any = [];
 
     for (let ability of abilities) {
-      const reqAbilities = await abilitiesRepository.findOneBy({ id: ability });
+      const reqAbilities = await abilityRepository.findOneBy({ id: ability });
       allAbilities.push(reqAbilities);
     }
 
@@ -194,79 +133,33 @@ export class PokemonService {
     return savedPokemon.id;
   }
 
-  async deletePokemon(id: string): Promise<Number | null> {
-    const param = Number(id);
-    const pokemon = await pokemonRepository.findOneBy({
-      id: param,
-    });
+  async updateName(name: string, pokemon: string) {
+    const query = this.buildFindPokemonQuery(pokemon);
+    await this.findPokemonByNameOrId(query);
 
-    if (!pokemon) {
-      throw new BadRequestError(`pokemon ID: ${param} does not exist`);
-    }
-
-    await pokemonRepository.delete(param);
-    return param;
-  }
-
-  async updatePokemonName(name: string, pokemonParam: string) {
-    let query: any = { name: pokemonParam };
-
-    if (!isNaN(+pokemonParam)) {
-      query = { id: Number(pokemonParam) };
-    }
-
-    const pokemon = await pokemonRepository.findOneBy(query);
-
-    if (!pokemon) {
-      throw new BadRequestError(
-        "pokemon cannot be updated, because it does not exist"
-      );
-    }
     await pokemonRepository.update(query, {
       name: name,
     });
   }
 
-  async updatePokemonAbilities(abilities: number[], pokemonParam: string) {
-    let query: any = { name: pokemonParam };
-
-    if (!isNaN(+pokemonParam)) {
-      query = { id: Number(pokemonParam) };
-    }
-
-    const pokemon = await pokemonRepository.findOneBy(query);
-
-    if (!pokemon) {
-      throw new BadRequestError(
-        "pokemon cannot be updated, because it does not exist"
-      );
-    }
+  async updateAbilities(abilities: number[], pokemon: string) {
+    const query = this.buildFindPokemonQuery(pokemon);
+    const result = await this.findPokemonByNameOrId(query);
 
     const allAbilities: any = [];
     for (let ability of abilities) {
-      const reqAbilities = await abilitiesRepository.findOneBy({ id: ability });
+      const reqAbilities = await abilityRepository.findOneBy({ id: ability });
       allAbilities.push(reqAbilities);
     }
 
-    pokemon.abilities = allAbilities;
+    result.abilities = allAbilities;
 
-    await pokemonRepository.save(pokemon);
+    await pokemonRepository.save(result);
   }
 
-  async updatePokemonTypes(types: number[], pokemonParam: string) {
-    let query: any = { name: pokemonParam };
-
-    if (!isNaN(+pokemonParam)) {
-      query = { id: Number(pokemonParam) };
-    }
-
-    const pokemon = await pokemonRepository.findOneBy(query);
-
-    if (!pokemon) {
-      throw new BadRequestError(
-        "pokemon cannot be updated, because it does not exist"
-      );
-    }
+  async updateTypes(types: number[], pokemon: string) {
+    const query = this.buildFindPokemonQuery(pokemon);
+    const result = await this.findPokemonByNameOrId(query);
 
     const allTypes: any = [];
     for (let type of types) {
@@ -274,25 +167,14 @@ export class PokemonService {
       allTypes.push(reqTypes);
     }
 
-    pokemon.types = allTypes;
+    result.types = allTypes;
 
-    await pokemonRepository.save(pokemon);
+    await pokemonRepository.save(result);
   }
 
-  async updatePokemonSprites(sprites: SpriteEntity[], pokemonParam: string) {
-    let query: any = { name: pokemonParam };
-
-    if (!isNaN(+pokemonParam)) {
-      query = { id: Number(pokemonParam) };
-    }
-
-    const pokemon = await pokemonRepository.findOneBy(query);
-
-    if (!pokemon) {
-      throw new BadRequestError(
-        "pokemon cannot be updated, because it does not exist"
-      );
-    }
+  async updateSprites(sprites: SpriteEntity[], pokemon: string) {
+    const query = this.buildFindPokemonQuery(pokemon);
+    const result = await this.findPokemonByNameOrId(query);
 
     for (let sprite of sprites) {
       const checkSprite = await spriteRepository.findOneBy({ img: sprite.img });
@@ -302,9 +184,34 @@ export class PokemonService {
       }
     }
 
-    pokemon.sprites = sprites;
+    result.sprites = sprites;
 
-    await pokemonRepository.save(pokemon);
+    await pokemonRepository.save(result);
     await spriteRepository.delete({ pokemon: IsNull() });
+  }
+
+  async delete(pokemon: string) {
+    const query = this.buildFindPokemonQuery(pokemon);
+    await this.findPokemonByNameOrId(query);
+
+    await pokemonRepository.delete(query);
+  }
+
+  buildFindPokemonQuery(pokemon: string): QueryParameter {
+    if (!isNaN(+pokemon)) {
+      return { id: Number(pokemon) };
+    }
+
+    return { name: pokemon };
+  }
+
+  async findPokemonByNameOrId(query: QueryParameter): Promise<PokemonEntity> {
+    const result = await pokemonRepository.findOneBy(query);
+
+    if (!result) {
+      throw new NotFoundError("Pokemon not found");
+    }
+
+    return result;
   }
 }

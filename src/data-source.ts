@@ -12,9 +12,9 @@ export const AppDataSource = new DataSource({
   username: "postgres",
   password: "password",
   database: "postgres",
-  synchronize: false,
+  synchronize: true,
   logging: false,
   entities: [PokemonEntity, AbilityEntity, SpriteEntity, TypeEntity],
   subscribers: [],
-  migrations: [],
+  migrations: ["./src/migratios/*.ts"],
 });
