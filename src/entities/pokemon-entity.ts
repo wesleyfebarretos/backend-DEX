@@ -1,10 +1,10 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  ManyToMany,
+  Entity,
   JoinTable,
+  ManyToMany,
   OneToMany,
+  PrimaryGeneratedColumn,
 } from "typeorm";
 import { AbilityEntity } from "./ability-entity";
 import { SpriteEntity } from "./sprite-entity";

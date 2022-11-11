@@ -1,4 +1,3 @@
-import { AppDataSource } from "../data-source";
 import { AbilityEntity } from "../entities/ability-entity";
 import { NotFoundError } from "../helpers/api-errors";
 import { abilityRepository } from "../repositories/abilities-repository";
