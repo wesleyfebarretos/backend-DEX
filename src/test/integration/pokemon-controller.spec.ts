@@ -90,79 +90,10 @@ describe("Pokemon Controller", () => {
       const response = await serverGetPokemonResponse("stringToForceError");
       expect(response.statusCode).toBe(StatusCodes.NOT_FOUND);
     });
-
-    // TYPE CONTROLLER TEST
-    it("findTypes", async () => {
-      await createType("water");
-      await createType("fire");
-
-      const response = await server.get("/type");
-      expect(response.statusCode).toBe(StatusCodes.OK);
-      expect(response.body.length).toBe(2);
-    });
-
-    it("findOneTypeById", async () => {
-      const type = await createType("dark");
-
-      const response = await server.get(`/type/${type.id}`);
-      expect(response.statusCode).toBe(StatusCodes.OK);
-      expect(response.body.name).toBe(type.name);
-      expect(response.body.id).toBe(type.id);
-    });
-
-    it("findOneTypeByName", async () => {
-      const type = await createType("fire");
-
-      const response = await server.get(`/type/${type.name}`);
-      expect(response.statusCode).toBe(StatusCodes.OK);
-      expect(response.body.name).toBe(type.name);
-      expect(response.body.id).toBe(type.id);
-    });
-
-    it("findOneTypeError", async () => {
-      const response = await server.get("/type/light");
-      expect(response.statusCode).toBe(StatusCodes.NOT_FOUND);
-    });
-
-    // ABILITY CONTROLLER TEST
-
-    it("findAbilities", async () => {
-      await createAbility("overgrow");
-      await createAbility("regenerate");
-      await createAbility("waterfall");
-
-      const response = await server.get("/ability");
-      expect(response.statusCode).toBe(StatusCodes.OK);
-      expect(response.body.length).toBe(3);
-    });
-
-    it("findOneAbilityById", async () => {
-      const ability = await createAbility("flash cannon");
-
-      const response = await server.get(`/ability/${ability.id}`);
-      expect(response.statusCode).toBe(StatusCodes.OK);
-      expect(response.body.name).toEqual(ability.name);
-      expect(response.body.id).toEqual(ability.id);
-    });
-
-    it("findOneAbilityByName", async () => {
-      const ability = await createAbility("solar beam");
-
-      const response = await server.get(`/ability/${ability.name}`);
-      expect(response.statusCode).toBe(StatusCodes.OK);
-      expect(response.body.isHidden).toEqual(ability.isHidden);
-      expect(response.body.name).toEqual(ability.name);
-      expect(response.body.id).toEqual(ability.id);
-    });
-
-    it("findOneAbilityError", async () => {
-      const response = await server.get("/ability/kamehameha");
-      expect(response.statusCode).toBe(StatusCodes.NOT_FOUND);
-    });
   });
 
   describe("POST", () => {
-    it("createPokemon", async () => {
+    it("create", async () => {
       const ability1 = await createAbility("overgrow");
       const ability2 = await createAbility("fireball");
       const type1 = await createType("dark");
@@ -198,7 +129,7 @@ describe("Pokemon Controller", () => {
   });
 
   describe("DELETE", () => {
-    it("deletePokemon", async () => {
+    it("delete", async () => {
       const pokemon = await createPokemon("zertofodao");
       const response = await server.delete(`/pokemon/${pokemon.name}`);
       expect(response.statusCode).toBe(StatusCodes.NO_CONTENT);
@@ -206,7 +137,7 @@ describe("Pokemon Controller", () => {
   });
 
   describe("PUT", () => {
-    it("updatePokemonName", async () => {
+    it("updateName", async () => {
       const pokemon = await createPokemon("weslynfodao");
 
       const response = await server
@@ -217,7 +148,7 @@ describe("Pokemon Controller", () => {
       expect(response.status).toBe(StatusCodes.OK);
     });
 
-    it("updatePokemonAbilities", async () => {
+    it("updateAbilities", async () => {
       const pokemon = await createPokemon("albegordura");
       const newAbility = await createAbility("firecover");
 
@@ -231,7 +162,7 @@ describe("Pokemon Controller", () => {
       expect(createdPokemon?.abilities.length).toBe(1);
     });
 
-    it("updatePokemonTypes", async () => {
+    it("updateTypes", async () => {
       const pokemon = await createPokemon("nngrotrosa");
       const newType = await createType("zertoOut");
       const newType2 = await createType("daviOut");
@@ -247,7 +178,7 @@ describe("Pokemon Controller", () => {
       expect(createdPokemon?.types[1].name).toBe(newType2.name);
     });
 
-    it("updatePokemonSprites", async () => {
+    it("updateSprites", async () => {
       const pokemon = await createPokemon("egirldozerto");
 
       const response = await server
