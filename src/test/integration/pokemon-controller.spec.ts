@@ -12,15 +12,13 @@ import { pokemonRepository } from "../../repositories/pokemon-repository";
 import { typeRepository } from "../../repositories/types-repository";
 import { PaginateObject } from "../../services/pokemon-service";
 
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 describe("Pokemon Controller", () => {
   let app: Express;
   let server: SuperTest<Test>;
   let container: StartedTestContainer;
-
-  jest.setTimeout(1000 * 60);
-  const sleep = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
-
+  jest.setTimeout(1000 * 180);
   beforeAll(async () => {
     //docker run --name some-postgres -p 5432:5432 -e POSTGRES_PASSWORD=password postgres
     container = await new GenericContainer("postgres")
@@ -36,10 +34,6 @@ describe("Pokemon Controller", () => {
     await sleep(1000);
     app = await setup();
     server = request(app);
-  });
-
-  afterAll(async () => {
-    await AppDataSource.destroy();
   });
 
   beforeEach(async () => {
@@ -212,6 +206,80 @@ describe("Pokemon Controller", () => {
       expect(createdPokemon?.sprites[1].img).toBe("evilzerto2");
       expect(createdPokemon?.sprites[2].img).toBe("goodDavi2");
       expect(createdPokemon?.sprites[3].img).toBe("evilDavi2");
+    });
+  });
+
+  describe("Ability Controller", () => {
+    describe("GET", () => {
+      it("findAll", async () => {
+        await createAbility("overgrow");
+        await createAbility("regenerate");
+        await createAbility("waterfall");
+
+        const response = await server.get("/ability");
+        expect(response.statusCode).toBe(StatusCodes.OK);
+        expect(response.body.length).toBe(3);
+      });
+
+      it("findOneById", async () => {
+        const ability = await createAbility("flash cannon");
+
+        const response = await server.get(`/ability/${ability.id}`);
+        expect(response.statusCode).toBe(StatusCodes.OK);
+        expect(response.body.name).toEqual(ability.name);
+        expect(response.body.id).toEqual(ability.id);
+      });
+
+      it("findOneByName", async () => {
+        const ability = await createAbility("solar beam");
+
+        const response = await server.get(`/ability/${ability.name}`);
+        expect(response.statusCode).toBe(StatusCodes.OK);
+        expect(response.body.isHidden).toEqual(ability.isHidden);
+        expect(response.body.name).toEqual(ability.name);
+        expect(response.body.id).toEqual(ability.id);
+      });
+
+      it("findOneError", async () => {
+        const response = await server.get("/ability/kamehameha");
+        expect(response.statusCode).toBe(StatusCodes.NOT_FOUND);
+      });
+    });
+  });
+
+  describe("Type Controller", () => {
+    describe("GET", () => {
+      it("findAll", async () => {
+        await createType("water");
+        await createType("fire");
+
+        const response = await server.get("/type");
+        expect(response.statusCode).toBe(StatusCodes.OK);
+        expect(response.body.length).toBe(2);
+      });
+
+      it("findOneById", async () => {
+        const type = await createType("dark");
+
+        const response = await server.get(`/type/${type.id}`);
+        expect(response.statusCode).toBe(StatusCodes.OK);
+        expect(response.body.name).toBe(type.name);
+        expect(response.body.id).toBe(type.id);
+      });
+
+      it("findOneByName", async () => {
+        const type = await createType("fire");
+
+        const response = await server.get(`/type/${type.name}`);
+        expect(response.statusCode).toBe(StatusCodes.OK);
+        expect(response.body.name).toBe(type.name);
+        expect(response.body.id).toBe(type.id);
+      });
+
+      it("findOneError", async () => {
+        const response = await server.get("/type/light");
+        expect(response.statusCode).toBe(StatusCodes.NOT_FOUND);
+      });
     });
   });
 

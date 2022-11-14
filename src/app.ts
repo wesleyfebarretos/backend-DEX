@@ -1,11 +1,11 @@
-import "express-async-errors";
-import express, { Express } from "express";
 import cors from "cors";
-import { errorMiddleware } from "./middlewares/error-middlewares";
+import express, { Express } from "express";
+import "express-async-errors";
 import { AppDataSource } from "./data-source";
+import { errorMiddleware } from "./middlewares/error-middlewares";
+import { abilityRouter } from "./router/ability-router";
 import { pokemonRouter } from "./router/pokemon-router";
 import { typeRouter } from "./router/type-router";
-import { abilityRouter } from "./router/ability-router";
 
 export async function setup(): Promise<Express> {
   await AppDataSource.initialize();
