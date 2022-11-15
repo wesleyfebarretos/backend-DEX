@@ -1,3 +1,5 @@
+import { StatusCodes } from "http-status-codes";
+
 export class ApiError extends Error {
   public readonly statusCode: number;
 
@@ -9,18 +11,18 @@ export class ApiError extends Error {
 
 export class BadRequestError extends ApiError {
   constructor(message: string) {
-    super(message, 400);
+    super(message, StatusCodes.BAD_REQUEST);
   }
 }
 
 export class UnauthorizedRequestError extends ApiError {
   constructor(message: string) {
-    super(message, 401);
+    super(message, StatusCodes.UNAUTHORIZED);
   }
 }
 
 export class NotFoundError extends ApiError {
   constructor(message: string) {
-    super(message, 404);
+    super(message, StatusCodes.NOT_FOUND);
   }
 }

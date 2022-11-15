@@ -20,7 +20,7 @@ describe("Pokemon Controller", () => {
   let container: StartedTestContainer;
   jest.setTimeout(1000 * 180);
   beforeAll(async () => {
-    //docker run --name some-postgres -p 5432:5432 -e POSTGRES_PASSWORD=password postgres
+    //docker run --name some-postgres -p 5432:5432 -e POSTGRE S_PASSWORD=password postgres
     container = await new GenericContainer("postgres")
       .withEnvironment({
         POSTGRES_PASSWORD: "password",
