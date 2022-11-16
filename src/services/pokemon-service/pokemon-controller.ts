@@ -1,13 +1,20 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { PokemonService } from "../services/pokemon-service";
+import { PokemonService } from "./pokemon-service";
 
 export class PokemonController {
+  private pokemonService: PokemonService;
+
+  constructor(pokemonService: PokemonService) {
+    this.pokemonService = pokemonService;
+  }
+
   async getAll(req: Request, res: Response) {
     const offset = Number(req.query.offset) || 0;
     const limit = Number(req.query.limit) || 24;
+    console.log(this.pokemonService);
 
-    const result = await new PokemonService().getAll(offset, limit);
+    const result = await this.pokemonService.getAll(offset, limit);
 
     res.json(result);
   }
@@ -15,7 +22,7 @@ export class PokemonController {
   async getOne(req: Request, res: Response) {
     const { pokemon } = req.params;
 
-    const result = await new PokemonService().getOne(pokemon);
+    const result = await this.pokemonService.getOne(pokemon);
 
     res.json(result);
   }
@@ -23,7 +30,7 @@ export class PokemonController {
   async create(req: Request, res: Response) {
     const { name, abilities, types, sprites } = req.body;
 
-    const result = await new PokemonService().create(
+    const result = await this.pokemonService.create(
       name,
       abilities,
       types,
@@ -40,7 +47,7 @@ export class PokemonController {
     const { name } = req.body;
     const { pokemon } = req.params;
 
-    await new PokemonService().updateName(name, pokemon);
+    await this.pokemonService.updateName(name, pokemon);
 
     res.json({ message: `Pokemon ${pokemon} successfully updated` });
   }
@@ -49,7 +56,7 @@ export class PokemonController {
     const { abilities } = req.body;
     const { pokemon } = req.params;
 
-    await new PokemonService().updateAbilities(abilities, pokemon);
+    await this.pokemonService.updateAbilities(abilities, pokemon);
 
     res.json({ message: `Pokemon ${pokemon} successfully updated` });
   }
@@ -58,7 +65,7 @@ export class PokemonController {
     const { types } = req.body;
     const { pokemon } = req.params;
 
-    await new PokemonService().updateTypes(types, pokemon);
+    await this.pokemonService.updateTypes(types, pokemon);
 
     res.json({ message: `Pokemon ${pokemon} successfully updated` });
   }
@@ -67,7 +74,7 @@ export class PokemonController {
     const { sprites } = req.body;
     const { pokemon } = req.params;
 
-    await new PokemonService().updateSprites(sprites, pokemon);
+    await this.pokemonService.updateSprites(sprites, pokemon);
 
     res.json({ message: `Pokemon ${pokemon} successfully updated` });
   }
@@ -75,7 +82,7 @@ export class PokemonController {
   async delete(req: Request, res: Response) {
     const { pokemon } = req.params;
 
-    await new PokemonService().delete(pokemon);
+    await this.pokemonService.delete(pokemon);
 
     res.status(StatusCodes.NO_CONTENT).send();
   }

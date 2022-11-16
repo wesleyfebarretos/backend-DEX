@@ -1,8 +1,19 @@
 import { Router } from "express";
-import { PokemonController } from "../controllers/pokemon-controller";
+import { abilityRepository } from "../repositories/abilities-repository";
+import { pokemonRepository } from "../repositories/pokemon-repository";
+import { spriteRepository } from "../repositories/sprite-reposository";
+import { typeRepository } from "../repositories/types-repository";
+import { PokemonController } from "../services/pokemon-service/pokemon-controller";
+import { PokemonService } from "../services/pokemon-service/pokemon-service";
 
 export const pokemonRouter = Router();
-const pokemonController = new PokemonController();
+const pokemonService = new PokemonService(
+  pokemonRepository,
+  typeRepository,
+  abilityRepository,
+  spriteRepository
+);
+const pokemonController = new PokemonController(pokemonService);
 
 pokemonRouter.get("", pokemonController.getAll);
 pokemonRouter.get("/:pokemon", pokemonController.getOne);

@@ -10,7 +10,7 @@ import { TypeEntity } from "../../entities/type-entity";
 import { abilityRepository } from "../../repositories/abilities-repository";
 import { pokemonRepository } from "../../repositories/pokemon-repository";
 import { typeRepository } from "../../repositories/types-repository";
-import { PaginateObject } from "../../services/pokemon-service";
+import { PaginateObject } from "../../services/pokemon-service/pokemon-service";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 

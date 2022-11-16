@@ -1,12 +1,9 @@
-import { IsNull } from "typeorm";
-import { AppDataSource } from "../data-source";
-import { PokemonEntity } from "../entities/pokemon-entity";
-import { SpriteEntity } from "../entities/sprite-entity";
-import { BadRequestError, NotFoundError } from "../helpers/api-errors";
-import { abilityRepository } from "../repositories/abilities-repository";
-import { pokemonRepository } from "../repositories/pokemon-repository";
-import { spriteRepository } from "../repositories/sprite-reposository";
-import { typeRepository } from "../repositories/types-repository";
+import { IsNull, Repository } from "typeorm";
+import { AbilityEntity } from "../../entities/ability-entity";
+import { PokemonEntity } from "../../entities/pokemon-entity";
+import { SpriteEntity } from "../../entities/sprite-entity";
+import { TypeEntity } from "../../entities/type-entity";
+import { BadRequestError, NotFoundError } from "../../helpers/api-errors";
 
 export interface PaginateObject<T> {
   next: string;
@@ -18,11 +15,27 @@ interface QueryParameter {
   name?: string;
 }
 export class PokemonService {
+  private pokemonRepository: Repository<PokemonEntity>;
+  private typeRepository: Repository<TypeEntity>;
+  private abilityRepository: Repository<AbilityEntity>;
+  private spriteRepository: Repository<SpriteEntity>;
+
+  constructor(
+    pokemonRepository: Repository<PokemonEntity>,
+    typeRepository: Repository<TypeEntity>,
+    abilityRepository: Repository<AbilityEntity>,
+    spriteRepository: Repository<SpriteEntity>
+  ) {
+    this.pokemonRepository = pokemonRepository;
+    this.typeRepository = typeRepository;
+    this.abilityRepository = abilityRepository;
+    this.spriteRepository = spriteRepository;
+  }
   async getAll(
     offset: number,
     limit: number
   ): Promise<PaginateObject<PokemonEntity>> {
-    const result = await AppDataSource.getRepository(PokemonEntity).find({
+    const result = await this.pokemonRepository.find({
       order: {
         id: "ASC",
       },
@@ -42,7 +55,7 @@ export class PokemonService {
   async getOne(pokemon: string): Promise<PokemonEntity> {
     const query = this.buildFindPokemonQuery(pokemon);
 
-    const result = await pokemonRepository.findOne({
+    const result = await this.pokemonRepository.findOne({
       where: query,
       relations: { abilities: true, types: true, sprites: true },
     });
@@ -59,7 +72,7 @@ export class PokemonService {
     types: number[],
     sprites: SpriteEntity[]
   ): Promise<Number> {
-    const pokemon = await pokemonRepository.findOne({
+    const pokemon = await this.pokemonRepository.findOne({
       where: { name: name },
       relations: { abilities: true, types: true, sprites: true },
     });
@@ -97,7 +110,7 @@ export class PokemonService {
         );
       }
 
-      const imgExist = await spriteRepository.findOne({
+      const imgExist = await this.spriteRepository.findOne({
         where: {
           img: sprite.img,
         },
@@ -111,25 +124,27 @@ export class PokemonService {
     const allAbilities: any = [];
 
     for (let ability of abilities) {
-      const reqAbilities = await abilityRepository.findOneBy({ id: ability });
+      const reqAbilities = await this.abilityRepository.findOneBy({
+        id: ability,
+      });
       allAbilities.push(reqAbilities);
     }
 
     const allTypes: any = [];
 
     for (let type of types) {
-      const reqTypes = await typeRepository.findOneBy({ id: type });
+      const reqTypes = await this.typeRepository.findOneBy({ id: type });
       allTypes.push(reqTypes);
     }
 
-    const newPokemon = pokemonRepository.create({
+    const newPokemon = this.pokemonRepository.create({
       name,
       abilities: allAbilities,
       types: allTypes,
       sprites,
     });
 
-    const savedPokemon = await pokemonRepository.save(newPokemon);
+    const savedPokemon = await this.pokemonRepository.save(newPokemon);
     return savedPokemon.id;
   }
 
@@ -137,7 +152,7 @@ export class PokemonService {
     const query = this.buildFindPokemonQuery(pokemon);
     await this.findPokemonByNameOrId(query);
 
-    await pokemonRepository.update(query, {
+    await this.pokemonRepository.update(query, {
       name: name,
     });
   }
@@ -148,13 +163,15 @@ export class PokemonService {
 
     const allAbilities: any = [];
     for (let ability of abilities) {
-      const reqAbilities = await abilityRepository.findOneBy({ id: ability });
+      const reqAbilities = await this.abilityRepository.findOneBy({
+        id: ability,
+      });
       allAbilities.push(reqAbilities);
     }
 
     result.abilities = allAbilities;
 
-    await pokemonRepository.save(result);
+    await this.pokemonRepository.save(result);
   }
 
   async updateTypes(types: number[], pokemon: string) {
@@ -163,13 +180,13 @@ export class PokemonService {
 
     const allTypes: any = [];
     for (let type of types) {
-      const reqTypes = await typeRepository.findOneBy({ id: type });
+      const reqTypes = await this.typeRepository.findOneBy({ id: type });
       allTypes.push(reqTypes);
     }
 
     result.types = allTypes;
 
-    await pokemonRepository.save(result);
+    await this.pokemonRepository.save(result);
   }
 
   async updateSprites(sprites: SpriteEntity[], pokemon: string) {
@@ -177,7 +194,9 @@ export class PokemonService {
     const result = await this.findPokemonByNameOrId(query);
 
     for (let sprite of sprites) {
-      const checkSprite = await spriteRepository.findOneBy({ img: sprite.img });
+      const checkSprite = await this.spriteRepository.findOneBy({
+        img: sprite.img,
+      });
 
       if (checkSprite) {
         throw new BadRequestError("IMG already exist");
@@ -186,15 +205,15 @@ export class PokemonService {
 
     result.sprites = sprites;
 
-    await pokemonRepository.save(result);
-    await spriteRepository.delete({ pokemon: IsNull() });
+    await this.pokemonRepository.save(result);
+    await this.spriteRepository.delete({ pokemon: IsNull() });
   }
 
   async delete(pokemon: string) {
     const query = this.buildFindPokemonQuery(pokemon);
     await this.findPokemonByNameOrId(query);
 
-    await pokemonRepository.delete(query);
+    await this.pokemonRepository.delete(query);
   }
 
   buildFindPokemonQuery(pokemon: string): QueryParameter {
@@ -206,7 +225,7 @@ export class PokemonService {
   }
 
   async findPokemonByNameOrId(query: QueryParameter): Promise<PokemonEntity> {
-    const result = await pokemonRepository.findOneBy(query);
+    const result = await this.pokemonRepository.findOneBy(query);
 
     if (!result) {
       throw new NotFoundError("Pokemon not found");

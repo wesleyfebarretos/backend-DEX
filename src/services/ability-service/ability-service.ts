@@ -1,10 +1,16 @@
-import { AbilityEntity } from "../entities/ability-entity";
-import { NotFoundError } from "../helpers/api-errors";
-import { abilityRepository } from "../repositories/abilities-repository";
+import { Repository } from "typeorm";
+import { AbilityEntity } from "../../entities/ability-entity";
+import { NotFoundError } from "../../helpers/api-errors";
 
 export class AbilityService {
+  private abilityRepository: Repository<AbilityEntity>;
+
+  constructor(abilityRepository: Repository<AbilityEntity>) {
+    this.abilityRepository = abilityRepository;
+  }
+
   async getAll(): Promise<AbilityEntity[]> {
-    const result = await abilityRepository.find({
+    const result = await this.abilityRepository.find({
       order: {
         id: "ASC",
       },
@@ -19,7 +25,7 @@ export class AbilityService {
       param = { id: Number(ability) };
     }
 
-    const result = await abilityRepository.findOne({
+    const result = await this.abilityRepository.findOne({
       where: param,
       relations: { pokemons: true },
       order: {

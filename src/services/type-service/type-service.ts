@@ -1,10 +1,16 @@
-import { TypeEntity } from "../entities/type-entity";
-import { NotFoundError } from "../helpers/api-errors";
-import { typeRepository } from "../repositories/types-repository";
+import { Repository } from "typeorm";
+import { TypeEntity } from "../../entities/type-entity";
+import { NotFoundError } from "../../helpers/api-errors";
 
 export class TypeService {
+  private typeRepository: Repository<TypeEntity>;
+
+  constructor(typeRepository: Repository<TypeEntity>) {
+    this.typeRepository = typeRepository;
+  }
+
   async getAll(): Promise<TypeEntity[]> {
-    const result = await typeRepository.find({
+    const result = await this.typeRepository.find({
       order: {
         id: "ASC",
       },
@@ -19,7 +25,7 @@ export class TypeService {
       param = { id: Number(type) };
     }
 
-    const result = await typeRepository.findOne({
+    const result = await this.typeRepository.findOne({
       where: param,
       relations: { pokemons: true },
       order: {
