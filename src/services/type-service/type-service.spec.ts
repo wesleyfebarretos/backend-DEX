@@ -42,6 +42,11 @@ describe("Test Service Test", () => {
     const result = await typeService.getAll();
 
     expect(result).toEqual([mockedType, mockedType2, mockedType3]);
+    expect(findMethod).toBeCalledWith({
+      order: {
+        id: "ASC",
+      },
+    });
   });
 
   it("should be able to get a type", async () => {
@@ -51,9 +56,16 @@ describe("Test Service Test", () => {
 
     findOneMethod.mockImplementation(() => Promise.resolve(mockedType));
 
-    const result = await typeService.getOne(mockedType.name);
+    const result = await typeService.getOne(`${mockedType.id}`);
 
     expect(result).toEqual(mockedType);
+    expect(findOneMethod).toBeCalledWith({
+      where: { id: mockedType.id },
+      relations: { pokemons: true },
+      order: {
+        pokemons: { id: "ASC" },
+      },
+    });
   });
 
   it("should not be able to get a type", async () => {

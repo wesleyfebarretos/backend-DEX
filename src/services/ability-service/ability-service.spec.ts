@@ -38,6 +38,11 @@ describe("Ability Service Test", () => {
     const result = await abilityService.getAll();
 
     expect(result).toEqual([mockedAbility, mockedAbility2]);
+    expect(findMethod).toBeCalledWith({
+      order: {
+        id: "ASC",
+      },
+    });
   });
 
   it("should be able to get a ability", async () => {
@@ -50,6 +55,13 @@ describe("Ability Service Test", () => {
     const result = await abilityService.getOne(mockedAbility.name);
 
     expect(result).toEqual(mockedAbility);
+    expect(findOneMethod).toBeCalledWith({
+      where: { name: mockedAbility.name },
+      relations: { pokemons: true },
+      order: {
+        pokemons: { id: "ASC" },
+      },
+    });
   });
 
   it("should not be able to get a ability", async () => {
