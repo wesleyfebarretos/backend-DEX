@@ -15,16 +15,11 @@ interface QueryParameter {
   name?: string;
 }
 export class PokemonService {
-  private pokemonRepository: Repository<PokemonEntity>;
-  private typeRepository: Repository<TypeEntity>;
-  private abilityRepository: Repository<AbilityEntity>;
-  private spriteRepository: Repository<SpriteEntity>;
-
   constructor(
-    pokemonRepository: Repository<PokemonEntity>,
-    typeRepository: Repository<TypeEntity>,
-    abilityRepository: Repository<AbilityEntity>,
-    spriteRepository: Repository<SpriteEntity>
+    private pokemonRepository: Repository<PokemonEntity>,
+    private typeRepository: Repository<TypeEntity>,
+    private abilityRepository: Repository<AbilityEntity>,
+    private spriteRepository: Repository<SpriteEntity>
   ) {
     this.pokemonRepository = pokemonRepository;
     this.typeRepository = typeRepository;

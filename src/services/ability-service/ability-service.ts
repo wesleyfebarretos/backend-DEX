@@ -3,9 +3,7 @@ import { AbilityEntity } from "../../entities/ability-entity";
 import { NotFoundError } from "../../helpers/api-errors";
 
 export class AbilityService {
-  private abilityRepository: Repository<AbilityEntity>;
-
-  constructor(abilityRepository: Repository<AbilityEntity>) {
+  constructor(private abilityRepository: Repository<AbilityEntity>) {
     this.abilityRepository = abilityRepository;
   }
 

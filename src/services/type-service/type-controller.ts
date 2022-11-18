@@ -8,17 +8,17 @@ export class TypeController {
     this.typeService = typeService;
   }
 
-  async getAll(_: Request, res: Response) {
+  getAll = async (_: Request, res: Response) => {
     const result = await this.typeService.getAll();
 
     res.json(result);
-  }
+  };
 
-  async getOne(req: Request, res: Response) {
+  getOne = async (req: Request, res: Response) => {
     const { type } = req.params;
 
     const result = await this.typeService.getOne(type);
 
     res.json(result);
-  }
+  };
 }

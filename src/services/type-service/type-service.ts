@@ -3,9 +3,7 @@ import { TypeEntity } from "../../entities/type-entity";
 import { NotFoundError } from "../../helpers/api-errors";
 
 export class TypeService {
-  private typeRepository: Repository<TypeEntity>;
-
-  constructor(typeRepository: Repository<TypeEntity>) {
+  constructor(private typeRepository: Repository<TypeEntity>) {
     this.typeRepository = typeRepository;
   }
 
