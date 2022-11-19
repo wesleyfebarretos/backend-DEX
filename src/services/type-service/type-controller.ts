@@ -2,9 +2,7 @@ import { Request, Response } from "express";
 import { TypeService } from "./type-service";
 
 export class TypeController {
-  private typeService: TypeService;
-
-  constructor(typeService: TypeService) {
+  constructor(private typeService: TypeService) {
     this.typeService = typeService;
   }
 

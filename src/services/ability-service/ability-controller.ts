@@ -2,9 +2,7 @@ import { Request, Response } from "express";
 import { AbilityService } from "./ability-service";
 
 export class AbilityController {
-  private abilityService: AbilityService;
-
-  constructor(abilityService: AbilityService) {
+  constructor(private abilityService: AbilityService) {
     this.abilityService = abilityService;
   }
   getAll = async (_: Request, res: Response) => {

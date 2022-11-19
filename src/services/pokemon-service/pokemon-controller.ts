@@ -3,9 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import { PokemonService } from "./pokemon-service";
 
 export class PokemonController {
-  private pokemonService: PokemonService;
-
-  constructor(pokemonService: PokemonService) {
+  constructor(private pokemonService: PokemonService) {
     this.pokemonService = pokemonService;
   }
 
