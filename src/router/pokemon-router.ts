@@ -7,12 +7,7 @@ import { PokemonController } from "../services/pokemon-service/pokemon-controlle
 import { PokemonService } from "../services/pokemon-service/pokemon-service";
 
 export const pokemonRouter = Router();
-const pokemonService = new PokemonService(
-	pokemonRepository,
-	typeRepository,
-	abilityRepository,
-	spriteRepository
-);
+const pokemonService = new PokemonService(pokemonRepository, typeRepository, abilityRepository, spriteRepository);
 const pokemonController = new PokemonController(pokemonService);
 
 pokemonRouter.get("", pokemonController.getAll);

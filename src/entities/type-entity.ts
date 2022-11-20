@@ -3,12 +3,12 @@ import { PokemonEntity } from "./pokemon-entity";
 
 @Entity({ name: "type" })
 export class TypeEntity {
-  @PrimaryGeneratedColumn({ name: "id" })
-  	id: number;
+    @PrimaryGeneratedColumn({ name: "id" })
+    id: number;
 
-  @Column({ name: "name" })
-  	name: string;
+    @Column({ name: "name" })
+    name: string;
 
-  @ManyToMany(() => PokemonEntity, (pokemon) => pokemon.types)
-  	pokemons: PokemonEntity[];
+    @ManyToMany(() => PokemonEntity, pokemon => pokemon.types)
+    pokemons: PokemonEntity[];
 }

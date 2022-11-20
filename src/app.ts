@@ -8,15 +8,15 @@ import { pokemonRouter } from "./router/pokemon-router";
 import { typeRouter } from "./router/type-router";
 
 export async function setup(): Promise<Express> {
-  await AppDataSource.initialize();
-  const app = express();
+    await AppDataSource.initialize();
+    const app = express();
 
-  app.use(cors());
-  app.use(express.json());
-  app.use("/pokemon", pokemonRouter);
-  app.use("/type", typeRouter);
-  app.use("/ability", abilityRouter);
-  app.use(errorMiddleware);
+    app.use(cors());
+    app.use(express.json());
+    app.use("/pokemon", pokemonRouter);
+    app.use("/type", typeRouter);
+    app.use("/ability", abilityRouter);
+    app.use(errorMiddleware);
 
-  return app;
+    return app;
 }
