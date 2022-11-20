@@ -1,17 +1,17 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from "typeorm";
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 import { PokemonEntity } from "./pokemon-entity";
 
 @Entity({ name: "ability" })
 export class AbilityEntity {
   @PrimaryGeneratedColumn({ name: "id" })
-  id: number;
+  	id: number;
 
   @Column({ name: "name" })
-  name: string;
+  	name: string;
 
   @Column({ name: "is_hidden" })
-  isHidden: boolean;
+  	isHidden: boolean;
 
   @ManyToMany(() => PokemonEntity, (pokemon) => pokemon.abilities)
-  pokemons: PokemonEntity[];
+  	pokemons: PokemonEntity[];
 }

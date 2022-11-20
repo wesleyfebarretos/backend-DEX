@@ -1,14 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from "typeorm";
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 import { PokemonEntity } from "./pokemon-entity";
 
 @Entity({ name: "type" })
 export class TypeEntity {
   @PrimaryGeneratedColumn({ name: "id" })
-  id: number;
+  	id: number;
 
   @Column({ name: "name" })
-  name: string;
+  	name: string;
 
   @ManyToMany(() => PokemonEntity, (pokemon) => pokemon.types)
-  pokemons: PokemonEntity[];
+  	pokemons: PokemonEntity[];
 }
