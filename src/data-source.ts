@@ -7,7 +7,7 @@ import { TypeEntity } from "./entities/type-entity";
 
 export const AppDataSource = new DataSource({
     type: "postgres",
-    host: "localhost",
+    host: "host.docker.internal",
     port: 5432,
     username: "postgres",
     password: "password",
