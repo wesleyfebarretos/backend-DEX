@@ -28,3 +28,4 @@ jspm_packages/
 .yarn/install-state.gz
 .pnp.*
 lint-result.xml
+dist/

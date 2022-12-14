@@ -5,6 +5,7 @@
     "license": "MIT",
     "scripts": {
         "dev": "nodemon src/server.ts",
+				"start-builded": "nodemon dist/server.js",
         "build": "tsc -p .",
         "test": "jest",
         "test:coverage": "jest --coverage",
