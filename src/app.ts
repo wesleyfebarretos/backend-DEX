@@ -1,4 +1,5 @@
 import cors from "cors";
+import "dotenv/config";
 import express, { Express } from "express";
 import "express-async-errors";
 import { AppDataSource } from "./data-source";

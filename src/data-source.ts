@@ -7,11 +7,11 @@ import { TypeEntity } from "./entities/type-entity";
 
 export const AppDataSource = new DataSource({
     type: "postgres",
-    host: "host.docker.internal",
-    port: 5432,
-    username: "postgres",
-    password: "password",
-    database: "postgres",
+    host: process.env.TYPEORM_HOST,
+    port: Number(process.env.TYPEORM_PORT),
+    username: process.env.TYPEORM_USERNAME,
+    password: process.env.TYPEORM_PASSWORD,
+    database: process.env.TYPEORM_DATABASE,
     synchronize: false,
     logging: false,
     entities: [PokemonEntity, AbilityEntity, SpriteEntity, TypeEntity],
