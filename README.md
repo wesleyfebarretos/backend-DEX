@@ -122,6 +122,8 @@ $ npm run dev
 
 ## API Reference
 
+Here we will learn more about the application's routes.
+
 ### Pokemons Route
 
 #### Get all pokemons
