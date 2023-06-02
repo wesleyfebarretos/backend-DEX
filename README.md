@@ -58,7 +58,7 @@ TYPEORM_DATABASE=
 Now you just need to type the following command in the project's root terminal and the project will be running on the http://localhost:8080/pokemon port.
 
 ```
-docker compose up
+$ docker compose up
 ```
 
 **PS:** It may take some time, because when the container goes up, a lot of information will be entered into the database. If any errors happen, just go into the back-end container and type npm run dev after the inserts have finished.
@@ -87,7 +87,15 @@ $ npm install
 
 **PostgresSQL Install**
 
-You will have to [download](https://www.postgresql.org/download/) Postgres locally on your machine and create a new database that you will use as a reference in the next step.
+You will have to [download](https://www.postgresql.org/download/) Postgres locally on your machine and create a new database that you will use as a reference in the .env file.
+
+**Database Dump**
+
+After installing Postgres and creating the database you need to run the dump file on the database, it is located in the directory below.
+
+```
+root/
+```
 
 **.env file**
 
@@ -98,5 +106,17 @@ TYPEORM_PORT=
 TYPEORM_USERNAME=
 TYPEORM_PASSWORD=
 TYPEORM_DATABASE=
+```
+
+**Running**
+
+```
+$ yarn dev
+```
+
+_or_
+
+```
+$ npm run dev
 ```
 
