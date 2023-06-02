@@ -94,7 +94,7 @@ You will have to [download](https://www.postgresql.org/download/) Postgres local
 After installing Postgres and creating the database you need to run the dump file on the database, it is located in the directory below.
 
 ```
-root/
+root/db/dump.sql
 ```
 
 **.env file**
