@@ -38,7 +38,7 @@ export class PokemonService {
         });
 
         return {
-            next: `http://localhost:3000/pokemon?offset=${offset + limit}&limit=${limit}`,
+            next: `http://localhost:8080/pokemon?offset=${offset + limit}&limit=${limit}`,
             results: result
         };
     }
@@ -109,7 +109,7 @@ export class PokemonService {
             const reqTypes = await this.typeRepository.findOneBy({ id: type });
             allTypes.push(reqTypes);
         }
-				
+
         const newPokemon = this.pokemonRepository.create({
             name,
             abilities: allAbilities,
