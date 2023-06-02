@@ -120,3 +120,47 @@ _or_
 $ npm run dev
 ```
 
+## API Reference
+
+**Pokemons**
+
+#### Get all pokemons
+
+```http
+  GET /pokemon
+```
+
+| Description                |
+| :------------------------- |
+| Return an array of pokemons |
+
+#### Get pokemon
+
+```http
+  GET /pokemon/${pokemon}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `pokemon`      | `string or number` | **Required**. you can search by id or name and return a pokemon |
+
+#### Create pokemon
+
+```http
+  POST /pokemon
+```
+```
+  MODEL
+  {
+    "name": "name"
+    "abilities": [1,2] \\ The numbers you put in are references to skill ids that already exist in the bank and will be entered this way.
+    "types": [1,2] \\ The numbers you put in are references to types ids that already exist in the bank and will be entered this way.
+    "sprites":[] \\ By rules of how the database was set up, you will create it with an empty array and update it later
+  }
+```
+
+| Description                |
+| :------------------------- |
+| Return a new pokemon |
+
+
