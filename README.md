@@ -142,7 +142,7 @@ $ npm run dev
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `pokemon`      | `string or number` | **Required**. you can search by id or name and return a pokemon |
+| `pokemon`      | `string or number` | **Required**. You can search by id or name and return a pokemon |
 
 #### Create pokemon
 
@@ -162,5 +162,146 @@ $ npm run dev
 | Description                |
 | :------------------------- |
 | Return a new pokemon |
+
+#### Delete pokemon
+
+```http
+  DELETE /pokemon/${pokemon}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `pokemon`      | `string or number` | **Required**. You can delete by id or name. |
+
+#### Update pokemon name
+
+```http
+  PUT /pokemon/${pokemon}/name
+```
+
+```
+  MODEL
+  {
+    "name": "x"
+  }
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `pokemon`      | `string or number` | **Required**. You can update by id or name and this will update the name.|
+
+#### Update pokemon abilities
+
+
+```http
+  PUT /pokemon/${pokemon}/abilities
+```
+
+```
+  MODEL
+  {
+    "abilities": [x,y]
+  }
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `pokemon`      | `string or number` | **Required**. You can update by id or name and this will update the abilities.|
+
+#### Update pokemon types
+
+
+```http
+  PUT /pokemon/${pokemon}/types
+```
+
+```
+  MODEL
+  {
+    "types": [x,y]
+  }
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `pokemon`      | `string or number` | **Required**. You can update by id or name and this will update the types.|
+
+#### Update pokemon sprites
+
+
+```http
+  PUT /pokemon/${pokemon}/sprites
+```
+
+```
+  MODEL
+  {
+    "sprites": [
+      {
+        img: "x.com.br", name: "front_default", pokemon: ${pokemon}
+      },
+      {
+        img: "y.com.br", name: "front_shiny", pokemon: ${pokemon}
+      },
+      {
+        img: "z.com.br", name: "back_default", pokemon: ${pokemon}
+      },
+      {
+        img: "v.com.br", name: "back_shiny", pokemon: ${pokemon}
+      }
+    ]
+  }
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `pokemon`      | `string or number` | **Required**. You can update by id or name and this will update the sprites.|
+
+### Abilities Route
+
+#### Get all abilities
+
+```http
+  GET /ability
+```
+
+| Description                |
+| :------------------------- |
+| Return an array of abilities |
+
+#### Get ability
+
+```http
+  GET /ability/${ability}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `ability` | `string or number` | **Required**. You can search by id or name and this will return an ability and all the pokemons that have it.|
+
+### Types Route
+
+#### Get all Types
+
+```http
+  GET /type
+```
+
+| Description                |
+| :------------------------- |
+| Return an array of Types |
+
+#### Get type
+
+```http
+  GET /type/${type}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `type`    | `string or number` | **Required**. You can search by id or name and this will return an type and all the pokemons that have it.|
+
+
+
 
 
