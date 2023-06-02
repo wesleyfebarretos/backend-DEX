@@ -122,7 +122,7 @@ $ npm run dev
 
 ## API Reference
 
-**Pokemons**
+### Pokemons Route
 
 #### Get all pokemons
 
