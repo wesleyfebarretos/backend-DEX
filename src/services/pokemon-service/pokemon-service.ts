@@ -109,7 +109,7 @@ export class PokemonService {
             const reqTypes = await this.typeRepository.findOneBy({ id: type });
             allTypes.push(reqTypes);
         }
-
+				
         const newPokemon = this.pokemonRepository.create({
             name,
             abilities: allAbilities,
