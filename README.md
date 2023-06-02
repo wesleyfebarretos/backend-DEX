@@ -32,7 +32,7 @@ If you have Docker the first installation process we will use it. If you don't h
 
 **That said, let's go!**
 
-### Istalling with Docker
+### Installing with Docker
 
 **Cloning the Repository**
 
