@@ -29,3 +29,36 @@ I wanted a way to build my front end without having to use [Pokeapi](https://pok
 ### Prerequisites
 
 If you have Docker the first installation process we will use it. If you don't have it i'll leave a tutorial [here](https://github.com/codeedu/wsl2-docker-quickstart) that works for both windows and linux, if you are on a mac the tutorial is [here](https://docs.docker.com/desktop/install/mac-install/). If you don't want to download Docker, below we also have the installation process without the use of Docker.
+
+**That said, let's go!**
+
+### Istalling with Docker
+
+**Cloning the Repository**
+
+```
+$ git clone https://github.com/Wesleyfbarretos/backend-DEX.git
+
+$ cd backend-DEX
+```
+
+**.env file**
+
+Now you just have to create an .env at the root of project and give value to the environment variables.
+```
+DB_HOST=
+DB_PORT=
+DB_USERNAME=
+DB_PASSWORD=
+DB_DATABASE=
+```
+
+**Docker CLI**
+
+Now you just need to type the following command in the project's root terminal and the project will be running on the http://localhost:8080/pokemon port.
+
+```
+docker compose up
+```
+
+**PS:** It may take some time, because when the container goes up, a lot of information will be entered into the database.
