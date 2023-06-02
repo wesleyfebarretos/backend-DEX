@@ -304,6 +304,22 @@ Here we will learn more about the application's routes.
 | `type`    | `string or number` | **Required**. You can search by id or name and this will return an type and all the pokemons that have it.|
 
 
+## Running Tests
+
+The project has unit and integration tests to run them run the following command
+
+```bash
+$ yarn test
+```
+
+_or_
+
+```bash
+$ npm run test
+```
+
+
+
 
 
 
