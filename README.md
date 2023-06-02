@@ -46,11 +46,11 @@ $ cd backend-DEX
 
 Now you just have to create an .env at the root of project and give value to the environment variables.
 ```
-DB_HOST=
-DB_PORT=
-DB_USERNAME=
-DB_PASSWORD=
-DB_DATABASE=
+TYPEORM_HOST=
+TYPEORM_PORT=
+TYPEORM_USERNAME=
+TYPEORM_PASSWORD=
+TYPEORM_DATABASE=
 ```
 
 **Docker CLI**
@@ -61,4 +61,42 @@ Now you just need to type the following command in the project's root terminal a
 docker compose up
 ```
 
-**PS:** It may take some time, because when the container goes up, a lot of information will be entered into the database.
+**PS:** It may take some time, because when the container goes up, a lot of information will be entered into the database. If any errors happen, just go into the back-end container and type npm run dev after the inserts have finished.
+
+## Installing without Docker
+
+**Cloning the Repository**
+
+```
+$ git clone https://github.com/Wesleyfbarretos/backend-DEX.git
+
+$ cd backend-DEX
+```
+
+**Installing dependencies**
+
+```
+$ yarn
+```
+
+_or_
+
+```
+$ npm install
+```
+
+**PostgresSQL Install**
+
+You will have to [download](https://www.postgresql.org/download/) Postgres locally on your machine and create a new database that you will use as a reference in the next step.
+
+**.env file**
+
+Now you just have to create an .env at the root of project and give value to the environment variables.
+```
+TYPEORM_HOST=
+TYPEORM_PORT=
+TYPEORM_USERNAME=
+TYPEORM_PASSWORD=
+TYPEORM_DATABASE=
+```
+
