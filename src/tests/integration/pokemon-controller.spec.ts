@@ -52,7 +52,7 @@ describe("Pokemon Controller", () => {
             const response = await server.get("/pokemon");
             const pokemonList: PaginateObject<PokemonEntity> = response.body;
             expect(response.statusCode).toBe(StatusCodes.OK);
-            expect(pokemonList.next).toBe("http://localhost:3000/pokemon?offset=24&limit=24");
+            expect(pokemonList.next).toBe("http://localhost:8080/pokemon?offset=24&limit=24");
             expect(pokemonList.results.length).toBeGreaterThan(0);
         });
 

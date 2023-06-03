@@ -184,7 +184,7 @@ describe("Pokemon Service Test", () => {
             const result = await pokemonService.getAll(0, 24);
 
             expect(result.results).toEqual([poke1, poke2]);
-            expect(result.next).toBe("http://localhost:3000/pokemon?offset=24&limit=24");
+            expect(result.next).toBe("http://localhost:8080/pokemon?offset=24&limit=24");
             expect(findMethod).toBeCalledWith({
                 order: {
                     id: "ASC"
