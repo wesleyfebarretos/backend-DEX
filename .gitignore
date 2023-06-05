@@ -29,5 +29,4 @@ jspm_packages/
 .pnp.*
 lint-result.xml
 dist/
-.env
 package-lock.json

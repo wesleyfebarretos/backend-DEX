@@ -27,4 +27,6 @@ services:
             - ${TYPEORM_PORT}:${TYPEORM_PORT}
         healthcheck:
             test: ["CMD-SHELL", "pg_isready -U postgres"]
-            interval: 10s
+            interval: 1s
+            timeout: 3s
+            retries: 30
